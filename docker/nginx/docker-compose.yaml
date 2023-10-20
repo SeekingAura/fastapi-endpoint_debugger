@@ -1,0 +1,31 @@
+version: '3.9'
+name: proxy
+services:
+  proxy:
+    image: nginx:1.25.1-alpine3.17
+    restart: always
+    volumes:
+      - type: bind
+        source: ../../proxy/vol/ssl
+        target: /etc/nginx/certs
+        bind:
+          propagation: rprivate
+      - type: bind
+        source: ../../proxy/vol/confs
+        target: /etc/nginx/conf.d
+        bind:
+          propagation: rprivate
+      - type: bind
+        source: ../../proxy/vol/nginx.conf
+        target: /etc/nginx/nginx.conf
+        bind:
+          propagation: rprivate
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
